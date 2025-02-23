@@ -1,0 +1,151 @@
+=== df_user_info ===
+Sem dados
+
+=== df_item_info ===
+Sem dados
+
+=== df_user_describe ===
+      historySize timestampHistory numberOfClicksHistory timeOnPageHistory  \
+count       8.12M            8.12M                 8.12M             8.12M   
+mean       164.84      1658636.80M                 12.05            88.77K   
+std        376.48         1097.43M                 37.39           113.93K   
+min          1.00      1656644.40M                  0.00             5.00K   
+25%         33.00      1657674.40M                  0.00            29.87K   
+50%         87.00      1658676.31M                  1.00            60.00K   
+75%        178.00      1659579.53M                 14.00           114.58K   
+max         7.00K      1660532.39M                14.56K            46.03M   
+
+      scrollPercentageHistory pageVisitsCountHistory timestampHistory_new  
+count                   8.12M                  8.12M                8.12M  
+mean                    54.01                   1.14          1658636.80M  
+std                     1.83K                   1.08             1097.43M  
+min                      0.02                   1.00          1656644.40M  
+25%                     27.08                   1.00          1657674.40M  
+50%                     43.23                   1.00          1658676.31M  
+75%                     59.93                   1.00          1659579.53M  
+max                   526.28K                 654.00          1660532.39M  
+
+=== df_item_describe ===
+                                        page                             url  \
+count                                 255603                          255603   
+unique                                255603                          255529   
+top     80d741db-6009-490d-b844-79d15408da9d  http://especiais.g1.globo.com/   
+freq                                       1                              50   
+mean                                     NaN                             NaN   
+min                                      NaN                             NaN   
+25%                                      NaN                             NaN   
+50%                                      NaN                             NaN   
+75%                                      NaN                             NaN   
+max                                      NaN                             NaN   
+
+                                     issued  \
+count                                255603   
+unique                                  NaN   
+top                                     NaN   
+freq                                    NaN   
+mean    2021-02-01 03:10:26.766454784+00:00   
+min               2014-07-31 08:00:01+00:00   
+25%               2020-02-17 08:08:03+00:00   
+50%               2021-08-21 19:34:28+00:00   
+75%        2022-05-03 02:00:19.500000+00:00   
+max               2022-08-15 02:57:16+00:00   
+
+                                   modified  \
+count                                255603   
+unique                                  NaN   
+top                                     NaN   
+freq                                    NaN   
+mean    2021-02-05 21:04:46.745566464+00:00   
+min               2014-07-31 08:15:03+00:00   
+25%               2020-02-21 08:57:00+00:00   
+50%               2021-08-25 17:23:27+00:00   
+75%               2022-05-04 22:16:22+00:00   
+max               2023-06-30 10:08:09+00:00   
+
+                                                    title  \
+count                                              255603   
+unique                                             254865   
+top     Eleições 2018 no G1 - Pesquisas, Apuração de V...   
+freq                                                   50   
+mean                                                  NaN   
+min                                                   NaN   
+25%                                                   NaN   
+50%                                                   NaN   
+75%                                                   NaN   
+max                                                   NaN   
+
+                                                    body  \
+count                                             255603   
+unique                                            255220   
+top     Mapa de apuração por zona eleitoral do município   
+freq                                                 202   
+mean                                                 NaN   
+min                                                  NaN   
+25%                                                  NaN   
+50%                                                  NaN   
+75%                                                  NaN   
+max                                                  NaN   
+
+                                                 caption  
+count                                             255603  
+unique                                            251510  
+top     Mapa de apuração por zona eleitoral do município  
+freq                                                 202  
+mean                                                 NaN  
+min                                                  NaN  
+25%                                                  NaN  
+50%                                                  NaN  
+75%                                                  NaN  
+max                                                  NaN  
+
+=== df_user_nulls ===
+userId: 0
+userType: 0
+historySize: 0
+history: 0
+timestampHistory: 0
+numberOfClicksHistory: 0
+timeOnPageHistory: 0
+scrollPercentageHistory: 0
+pageVisitsCountHistory: 0
+timestampHistory_new: 0
+
+=== df_item_nulls ===
+page: 0
+url: 0
+issued: 0
+modified: 0
+title: 0
+body: 0
+caption: 0
+
+=== userType_counts ===
+userType
+Non-Logged    54.74%
+Logged        45.26%
+Name: proportion, dtype: object
+
+=== top_titles ===
+Eleições 2018 no G1 - Pesquisas, Apuração de Votos e Resultados: 50
+Empresas abrem vagas de emprego, estágio e trainee; veja lista: 18
+Balcão do BDMG: veja vagas de emprego e estágio em BH e região: 13
+Empresas abrem vagas de emprego e estágio; veja lista: 12
+Produtos das Ceasas do Paraná têm alteração nos preços; confira: 11
+Mega-Sena pode pagar R$ 3 milhões neste sábado: 8
+Confira público e locais para se vacinar contra a Covid-19 em Campo Grande: 6
+Agenda cultural: confira o que fazer na Grande Belém neste fim de semana: 6
+Mega-Sena pode pagar R$ 3 milhões nesta quarta-feira: 6
+Litoral da Paraíba tem sete trechos de praias impróprios para banho; confira locais: 6
+
+=== top_captions ===
+Mapa de apuração por zona eleitoral do município: 202
+Boa noite. Aqui estão as notícias para você terminar o dia bem-informado.: 166
+Tudo o que você precisa ouvir para começar o dia sabendo as notícias que mais importam.: 155
+Apostas podem ser feitas até as 19h em lotéricas ou pela internet. Valor da aposta mínima é de R$ 4,50.: 119
+Veja como obter informações das empresas citadas no programa.: 102
+Boa noite! Aqui estão as principais notícias para você terminar o dia bem-informado.: 101
+Boa noite! Aqui estão as notícias para você terminar o dia bem-informado.: 86
+Boa noite! Aqui estão as principais notícias para você terminar o dia bem-informado: 71
+Boa noite! Aqui estão as principais notícias do estado para você terminar o dia bem-informado.: 63
+Os interessados nas oportunidades podem entrar em contato com a Seteq através da internet.: 58
+

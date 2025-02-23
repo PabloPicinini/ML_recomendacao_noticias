@@ -1,0 +1,53 @@
+FROM apache/airflow:2.5.1-python3.10
+
+# 1. Use root para instalar pacotes do sistema, incluindo Java, procps e libgomp1
+USER root
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    python3-apt \
+    openjdk-11-jdk \
+    procps \
+    libgomp1 \
+    curl \
+    unzip \
+    netcat \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# 2. Definir a variável JAVA_HOME
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+
+# 3. Volta ao usuário airflow para instalar bibliotecas Python
+USER airflow
+COPY requirements_airflow.txt /tmp/requirements_airflow.txt
+RUN pip install --user --no-cache-dir -r /tmp/requirements_airflow.txt
+
+# 5. Volta para root para copiar o repositório
+USER root
+COPY script_shared /opt/airflow/shared/script_shared
+COPY pipelines /opt/airflow/shared/pipelines
+COPY docker/init_airflow.sh /opt/airflow/shared/init_airflow.sh
+
+
+# Ajusta permissões de forma global
+RUN chmod -R 775 /opt/airflow/shared/pipelines
+RUN chown -R 50000:50000 /opt/airflow/shared/pipelines || true
+
+# Dando permissão para executar o init_airflow
+RUN chmod +x /opt/airflow/shared/init_airflow.sh
+
+# 6. Copia os DAGs para o diretório próprio do Airflow
+COPY pipelines/dags /opt/airflow/dags
+
+# 7. Criar a pasta script_shared/data/raw e ajustar permissões
+RUN mkdir -p /opt/airflow/shared/script_shared/data/raw
+RUN chown -R 50000:50000 /opt/airflow/shared/script_shared || true
+RUN chmod -R 775 /opt/airflow/shared/script_shared || true
+
+# 8. Define o usuário airflow e o WORKDIR
+USER airflow
+WORKDIR /opt/airflow/shared
+
+# 9. Ajusta o PYTHONPATH para garantir imports relativos
+ENV PYTHONPATH="/opt/airflow/shared:${PYTHONPATH}"
+ENV APP_ENV=airflow

@@ -1,0 +1,23 @@
+FROM python:3.10
+
+WORKDIR /app
+
+# Instala as dependências da API
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copia o repositório para /app
+COPY app /app
+COPY script_shared /app
+
+# Copia o script de entrada da raiz e torna-o executável
+COPY docker/entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+# Configura o PYTHONPATH para incluir a raiz do projeto
+ENV PYTHONPATH="/app:${PYTHONPATH}"
+ENV APP_ENV=api
+
+
+EXPOSE 8000
+CMD ["/app/entrypoint.sh"]

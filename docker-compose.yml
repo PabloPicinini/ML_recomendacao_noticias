@@ -1,0 +1,107 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    container_name: api_inferencia
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./script_shared:/app/script_shared
+    networks:
+      - recomm_net
+
+  airflow-webserver:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.airflow
+    container_name: airflow-webserver
+    command: >
+      bash -c "/opt/airflow/shared/init_airflow.sh & airflow webserver --port 8080"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./script_shared:/opt/airflow/shared/script_shared
+      - ./pipelines/dags:/opt/airflow/dags
+      - ./pipelines:/opt/airflow/shared/pipelines
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=True
+      - AIRFLOW_UID=50000
+      - AIRFLOW__WEBSERVER__SECRET_KEY=my_fixed_secret_key_value
+    networks:
+      - recomm_net
+    depends_on:
+      - postgres
+
+  airflow-scheduler:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.airflow
+    container_name: airflow-scheduler
+    command: >
+      bash -c "airflow db init && airflow scheduler"
+    volumes:
+      - ./script_shared:/opt/airflow/shared/script_shared
+      - ./pipelines/dags:/opt/airflow/dags
+      - ./pipelines:/opt/airflow/shared/pipelines
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=True
+      - AIRFLOW_UID=50000
+      - AIRFLOW__WEBSERVER__SECRET_KEY=my_fixed_secret_key_value
+    networks:
+      - recomm_net
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    networks:
+      - recomm_net
+  
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    user: "0:0"  # Executa como root apenas para corrigir permissões no primeiro start
+    entrypoint: ["/bin/sh", "-c", "mkdir -p /var/lib/grafana && chmod -R 777 /var/lib/grafana && /run.sh"]
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_INSTALL_PLUGINS=marcusolsson-json-datasource
+    volumes:
+      - ./grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - recomm_net
+
+
+
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - recomm_net
+
+
+networks:
+  recomm_net:
+    driver: bridge
